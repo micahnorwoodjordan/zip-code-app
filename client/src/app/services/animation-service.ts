@@ -11,6 +11,9 @@ export class AnimationService {
     // the range of effects supported are only limited by the underlying `animejs` library
     // which has an amazingly simple API that can applay a wide array of animation effects
 
+    // NOTE: the scope of the animations this application applies is small,
+    // but using the `animejs` library in my experience makes all animations MUCH more smooth than directly manipulating DOM elements with Javascript
+
     constructor() { }
 
     private elementIsValid(element: any): boolean { return element !== null && element !== undefined; }
