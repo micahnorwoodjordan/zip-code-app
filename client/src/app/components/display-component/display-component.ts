@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { NgIf, AsyncPipe } from '@angular/common';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import {
   FormControl, Validators, FormsModule, ReactiveFormsModule,
@@ -17,8 +18,13 @@ import { Observable, of } from 'rxjs';
 import { FlexLayoutModule } from 'ng-flex-layout';
 
 import { GeoData } from '../../interfaces/GeoData';
+
 import { ApiService } from '../../services/api-service';
 import { AnimationService } from '../../services/animation-service';
+
+import { SnackbarComponent } from '../snackbar-component/snackbar-component';
+
+import { HttpStatusCode } from '../../enums/HttpStatusCodes';
 
 @Component({
   selector: 'app-display-component',
@@ -44,6 +50,8 @@ export class DisplayComponent implements OnInit {
   public defaultInfoString: string = 'find geography data associated with a zip code';
   public zipCodeInputFormControl = new FormControl('', [Validators.required, this.validateZipCodeInput()]);
 
+  private apiErrorMessageGeneric: string = 'there was an unknown issue getting the zip code you provided';
+  private apiErrorMessage404: string = 'the zip code you provided does not exist';
   private defaultGeoIconAnimationScale: number = 2;
   private geoIconElementId: string = 'geo-icon';
   private animationIsComplete: boolean = false;
@@ -58,6 +66,16 @@ export class DisplayComponent implements OnInit {
     this.setGeoDataResponse(undefined);
     this.setReadyToSubmit(false);
     this.setZipCodeInput('');
+  }
+
+  private _snackBar = inject(MatSnackBar);
+
+  private openSnackBar(message: string) {
+    this._snackBar.openFromComponent(SnackbarComponent, {
+      data: {
+        errorMessage: `${message}: ${this.zipCodeInput}`
+      }
+    });
   }
 
   constructor(private apiService: ApiService, private animationService: AnimationService) { }
@@ -111,7 +129,12 @@ export class DisplayComponent implements OnInit {
           this.setGeoDataResponse(of(geoDataResponse));
         },
         error: (err) => {
-          // TODO: fire snackbar on error
+          // TODO: add more granular handling
+          if (err.status == HttpStatusCode.NOT_FOUND) {
+            this.openSnackBar(this.apiErrorMessage404);
+          } else if (err.status == HttpStatusCode.INTERNAL_SERVER_ERROR) {
+            this.openSnackBar(this.apiErrorMessageGeneric);
+          }
           console.error('Error getting zip code data:', err);
         }
       });
