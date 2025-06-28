@@ -15,21 +15,35 @@
     </div>
 
     <!-- display card -->
-    <div *ngIf="geoDataResponse$ | async as geoData">
-        <mat-card class="display-card" appearance="outlined">
-            <mat-card-header>
-                <mat-card-title>
-                    <!--
-                        NOTE: i wonder if it's safe to assume that accessing the 1st element will always make sense
-                        i have not been able to find a zip code that return more than one element
-                     -->
-                    <h1>{{geoData.places[0]['place name']}}</h1>
-                </mat-card-title>
-                <mat-card-subtitle>
-                    <h2>{{geoData.places[0].state}}</h2>
-                </mat-card-subtitle>
-            </mat-card-header>
-        </mat-card>
+    <div>
+        <div *ngIf="geoDataResponse$ | async as geoData">
+            <mat-card class="display-card" appearance="outlined">
+                <mat-card-header>
+                    <mat-card-title>
+                        <!--
+                            NOTE: i wonder if it's safe to assume that accessing the 1st element will always make sense
+                            i have not been able to find a zip code that return more than one element
+                        -->
+                        <h1>{{geoData.places[0]['place name']}}</h1>
+                    </mat-card-title>
+                    <mat-card-subtitle>
+                        <h2>{{geoData.places[0].state}}</h2>
+                    </mat-card-subtitle>
+                </mat-card-header>
+            </mat-card>
+        </div>
+
+        <div *ngIf="geoDataResponse$ === undefined">
+            <mat-card class="display-card-blank" appearance="outlined">
+                <mat-card-header>
+                    <mat-card-title>
+                        <h1>
+                            <mat-icon class="icon">location_searching</mat-icon>
+                        </h1>
+                    </mat-card-title>
+                </mat-card-header>
+            </mat-card>
+        </div>
     </div>
 
     <!-- submit button -->
