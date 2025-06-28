@@ -3,3 +3,4 @@
 
 .display-card { border-radius: 10px; text-align: center; width: 30vw; }
 mat-card-header { justify-content: center; text-align: center; }
+mat-card-title { font-family: 'DinaRemaster', 'Roboto'; }

@@ -1,7 +1,16 @@
 @use '@angular/material' as mat;
 
+
+@font-face {
+  font-family: 'DinaRemaster';
+  src: url('https://static.micahnorwoodjordan.com/DinaRemaster.ttc') format('DinaRemaster');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 body {
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-family: 'DinaRemaster', 'Roboto', 'Helvetica Neue', sans-serif;
   margin: 0;
   padding: 30px;
   height: 100%;
@@ -12,7 +21,7 @@ body {
       primary: mat.$green-palette,
       tertiary: mat.$blue-palette,
     ),
-    typography: Roboto,
+    typography: 'DinaRemaster',
     density: 0,
   ));
 }
