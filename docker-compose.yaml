@@ -10,4 +10,7 @@ services:
       - 4200:4200
     environment:
       - CI=true  # bypass interactive node prompts
-    command: sh -c "npm install && npx ng serve --host 0.0.0.0"
+    command: sh -c "
+        npm install &&
+        npx ng serve --host 0.0.0.0
+      "
