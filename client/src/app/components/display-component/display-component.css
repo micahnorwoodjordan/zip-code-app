@@ -1,13 +1,16 @@
 .submit-button { border-radius: 10px; transform: scale(1); transition: 0.5s; font-size: large; }
 .submit-button:hover { transform: scale(1.5); transition: 0.5s; }
 
-.display-card { border-radius: 10px; text-align: center; width: 30vw; }
+.display-card { border-radius: 10px; text-align: center; width: 30vw; height: 14vh; }
 .display-card-blank { border-radius: 10px; text-align: center; width: 30vw; height: 14vh; }
 .icon { transform: scale(3); }
 
 .input-field { font-size: larger; }
 
 .default-info-string { color: white; }
+
+.display-card-primary-div {  }
+.display-card-primary-div:hover { cursor: pointer; }
 
 mat-card-header { justify-content: center; text-align: center; }
 mat-card-title { font-family: 'DinaRemaster', 'Roboto'; }
