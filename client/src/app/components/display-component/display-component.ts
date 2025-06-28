@@ -26,6 +26,8 @@ import { SnackbarComponent } from '../snackbar-component/snackbar-component';
 
 import { HttpStatusCode } from '../../enums/HttpStatusCodes';
 
+import { handleApiError } from '../../utilities/error-handling/ErrorHandler';
+
 @Component({
   selector: 'app-display-component',
   imports: [
@@ -52,6 +54,7 @@ export class DisplayComponent implements OnInit {
 
   private apiErrorMessageGeneric: string = 'there was an unknown issue getting the zip code you provided';
   private apiErrorMessage404: string = 'the zip code you provided does not exist';
+  private apiErrorMessageUnexpected4xx: string = 'A valid request returned a 4xx (non-404) error. The API may have been updated upstream.';
   private defaultGeoIconAnimationScale: number = 2;
   private geoIconElementId: string = 'geo-icon';
   private animationIsComplete: boolean = false;
@@ -130,13 +133,11 @@ export class DisplayComponent implements OnInit {
           this._snackBar.dismiss();
         },
         error: (err) => {
-          // TODO: add more granular handling
-          if (err.status == HttpStatusCode.NOT_FOUND) {
-            this.openSnackBar(this.apiErrorMessage404);
-          } else if (err.status == HttpStatusCode.INTERNAL_SERVER_ERROR) {
-            this.openSnackBar(this.apiErrorMessageGeneric);
-          }
-          console.error('Error getting zip code data:', err);
+          handleApiError(err, this.openSnackBar.bind(this), {
+            notFound: this.apiErrorMessage404,
+            generic: this.apiErrorMessageGeneric,
+            unexpected4xx: this.apiErrorMessageUnexpected4xx
+          });
         }
       });
     }
