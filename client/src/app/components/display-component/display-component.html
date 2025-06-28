@@ -3,26 +3,38 @@
     <div>
         <mat-form-field class="input-field">
             <mat-label>enter zip code here</mat-label>
-            <input matInput>
+            <input matInput [formControl]="zipCodeInputFormControl">
+            <mat-error *ngIf="zipCodeErrorMessage">
+                {{ zipCodeErrorMessage }}
+            </mat-error>
         </mat-form-field>
     </div>
 
     <!-- display card -->
-    <div>
+    <div *ngIf="geoDataResponse$ | async as geoData">
         <mat-card class="display-card" appearance="outlined">
             <mat-card-header>
                 <mat-card-title>
-                    <h1>{{city}}</h1>
+                    <!--
+                        NOTE: i wonder if it's safe to assume that accessing the 1st element will always make sense
+                        i have not been able to find a zip code that return more than one element
+                     -->
+                    <h1>{{geoData.places[0]['place name']}}</h1>
                 </mat-card-title>
                 <mat-card-subtitle>
-                    <h2>{{state}}</h2>
+                    <h2>{{geoData.places[0].state}}</h2>
                 </mat-card-subtitle>
             </mat-card-header>
         </mat-card>
     </div>
 
+    <div *ngIf="geoDataResponse$ === undefined">
+        <p>{{defaultInfoString}}</p>
+    </div>
+
+
     <!-- submit button -->
     <div class="pad-top-5">
-    <button mat-raised-button class="submit-button">Submit</button>
+    <button [disabled]="!readyToSubmit" mat-raised-button class="submit-button" (click)="onSubmit()">Submit</button>
     </div>
 </div>
