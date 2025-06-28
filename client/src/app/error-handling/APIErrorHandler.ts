@@ -1,5 +1,5 @@
 
-import { HttpStatusCode } from '../../enums/HttpStatusCodes';
+import { HttpStatusCode } from '../enums/HttpStatusCodes';
 
 
 export function handleApiError(

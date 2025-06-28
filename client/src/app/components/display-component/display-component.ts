@@ -26,7 +26,7 @@ import { SnackbarComponent } from '../snackbar-component/snackbar-component';
 
 import { HttpStatusCode } from '../../enums/HttpStatusCodes';
 
-import { handleApiError } from '../../utilities/error-handling/ErrorHandler';
+import { handleApiError } from '../../error-handling/APIErrorHandler';
 
 @Component({
   selector: 'app-display-component',
