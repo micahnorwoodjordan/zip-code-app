@@ -2,8 +2,8 @@
 .submit-button:hover { transform: scale(1.5); transition: 0.5s; }
 
 .card { transform: rotateY(0deg); }
-.card-face-blank { border-radius: 10px; text-align: center; width: 30vw; height: 14vh; }
-.card-face { border-radius: 10px; text-align: center; width: 30vw; height: 14vh; transform-style: preserve-3d; }
+.card-face-blank { border-radius: 10px; text-align: center; width: 30vw; height: 16vh; }
+.card-face { border-radius: 10px; text-align: center; width: 30vw; height: 16vh; transform-style: preserve-3d; }
 
 .front { }
 .back { transform: rotateY(180deg); }
