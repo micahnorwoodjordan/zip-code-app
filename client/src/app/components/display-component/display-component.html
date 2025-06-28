@@ -26,6 +26,6 @@
 
     <!-- submit button -->
     <div class="pad-top-5">
-    <button mat-raised-button class="submit-button">Submit</button>
+    <button [disabled]="!readyToSubmit" mat-raised-button class="submit-button">Submit</button>
     </div>
 </div>

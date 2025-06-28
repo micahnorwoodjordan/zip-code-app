@@ -38,8 +38,11 @@ export class DisplayComponent implements OnInit {
   public city: string = 'Phoenix';
   public state: string = 'Arizona';
   public geoData$!: Observable<GeoData>;
+  public readyToSubmit: boolean = false;
 
   public zipCodeInputFormControl = new FormControl('', [Validators.required, this.validateZipCodeInput()]);
+
+  private setReadyToSubmit(newValue: boolean) { this.readyToSubmit = newValue; }
 
   constructor(private apiService: ApiService) { }
 
@@ -47,10 +50,12 @@ export class DisplayComponent implements OnInit {
     this.zipCodeInputFormControl.valueChanges.subscribe(value => {
       // gets evaluated each time a user types into the form input field
       if (!this.zipCodeErrorMessage && value !== null) {
-        console.log(value);
+        this.setReadyToSubmit(true);
+      } else {
+        this.setReadyToSubmit(false);
       }
     });
-    // this.apiService.getZipCodeData      
+    // this.apiService.getZipCodeData
   }
 
   private validateZipCodeInput(): ValidatorFn {
