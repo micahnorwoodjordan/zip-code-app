@@ -1,10 +1,25 @@
 @use '@angular/material' as mat;
 
+
+@font-face {
+  font-family: 'DinaRemaster';
+  src: url('https://static.micahnorwoodjordan.com/DinaRemaster.ttc') format('DinaRemaster');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 body {
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-family: 'DinaRemaster', 'Roboto', 'Helvetica Neue', sans-serif;
   margin: 0;
-  padding: 30px;
   height: 100%;
+
+  // build a grid background
+  background-color: rgb(17, 17, 17);
+  background-image:
+    linear-gradient(to right, #6a6969 1px, transparent 1px),
+    linear-gradient(to bottom, #6a6969 1px, transparent 1px);
+  background-size: 100px 100px; /* grid cell size */
 
   @include mat.theme((
     color: (
@@ -12,11 +27,7 @@ body {
       primary: mat.$green-palette,
       tertiary: mat.$blue-palette,
     ),
-    typography: Roboto,
+    typography: 'DinaRemaster',
     density: 0,
   ));
-}
-
-html {
-  height: 100%;
 }
