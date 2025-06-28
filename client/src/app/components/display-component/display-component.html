@@ -3,7 +3,10 @@
     <div>
         <mat-form-field class="input-field">
             <mat-label>enter zip code here</mat-label>
-            <input matInput>
+            <input matInput [formControl]="zipCodeInputFormControl">
+            <mat-error *ngIf="zipCodeErrorMessage">
+                {{ zipCodeErrorMessage }}
+            </mat-error>
         </mat-form-field>
     </div>
 
