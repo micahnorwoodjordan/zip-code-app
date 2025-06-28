@@ -1,6 +1,6 @@
 <div fxLayout="column" fxLayoutAlign="center center">
     <div>
-        <h3 class="default-info-string">{{defaultInfoString}}</h3>
+        <h3 class="default-info-string">{{generalInfoString}}</h3>
     </div>
 
     <!-- input field -->
@@ -15,26 +15,44 @@
     </div>
 
     <!-- display card -->
-    <div>
-        <div *ngIf="geoDataResponse$ | async as geoData">
-            <mat-card class="display-card" appearance="outlined">
-                <mat-card-header>
-                    <mat-card-title>
-                        <!--
-                            NOTE: i wonder if it's safe to assume that accessing the 1st element will always make sense
-                            i have not been able to find a zip code that return more than one element
-                        -->
-                        <h1>{{geoData.places[0]['place name']}}</h1>
-                    </mat-card-title>
-                    <mat-card-subtitle>
-                        <h2>{{geoData.places[0].state}}</h2>
-                    </mat-card-subtitle>
-                </mat-card-header>
-            </mat-card>
+    <div class="display-card-primary-div">
+        <div id="card" *ngIf="geoDataResponse$ | async as geoData" (click)="toggleCardSide()">
+            <div *ngIf="showFrontOfCard">
+                <mat-card class="card-face front" appearance="outlined">
+                    <mat-card-header>
+                        <mat-card-title>
+                            <!--
+                                NOTE: i wonder if it's safe to assume that accessing the 1st element will always make sense
+                                i have not been able to find a zip code that return more than one element
+                            -->
+                            <h1>{{geoData.places[0]['place name']}}</h1>
+                        </mat-card-title>
+                        <mat-card-subtitle>
+                            <h2>{{geoData.places[0].state}}</h2>
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                </mat-card>
+            </div>
+            <div *ngIf="!showFrontOfCard">
+                <mat-card class="card-face back" appearance="outlined">
+                    <mat-card-header>
+                        <mat-card-title>
+                            <!--
+                                NOTE: i wonder if it's safe to assume that accessing the 1st element will always make sense
+                                i have not been able to find a zip code that return more than one element
+                            -->
+                        </mat-card-title>
+                        <mat-card-subtitle>
+                            <h1>Latitude: {{geoData.places[0].latitude}}</h1>
+                            <h1>Longitude: {{geoData.places[0].longitude}}</h1>
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                </mat-card>
+            </div>
         </div>
 
         <div *ngIf="geoDataResponse$ === undefined">
-            <mat-card class="display-card-blank" appearance="outlined">
+            <mat-card class="card-face-blank" appearance="outlined">
                 <mat-card-header>
                     <mat-card-title>
                         <h1>
