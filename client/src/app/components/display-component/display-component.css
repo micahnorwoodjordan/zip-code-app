@@ -1,8 +1,13 @@
 .submit-button { border-radius: 10px; transform: scale(1); transition: 0.5s; font-size: large; }
 .submit-button:hover { transform: scale(1.5); transition: 0.5s; }
 
-.display-card { border-radius: 10px; text-align: center; width: 30vw; height: 14vh; }
-.display-card-blank { border-radius: 10px; text-align: center; width: 30vw; height: 14vh; }
+.card { transform: rotateY(0deg); }
+.card-face-blank { border-radius: 10px; text-align: center; width: 30vw; height: 14vh; }
+.card-face { border-radius: 10px; text-align: center; width: 30vw; height: 14vh; transform-style: preserve-3d; }
+
+.front { }
+.back { transform: rotateY(180deg); }
+
 .icon { transform: scale(3); }
 
 .input-field { font-size: larger; }

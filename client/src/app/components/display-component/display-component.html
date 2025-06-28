@@ -16,9 +16,9 @@
 
     <!-- display card -->
     <div class="display-card-primary-div">
-        <div *ngIf="geoDataResponse$ | async as geoData" (click)="toggleCardSide()">
+        <div id="card" *ngIf="geoDataResponse$ | async as geoData" (click)="toggleCardSide()">
             <div *ngIf="showFrontOfCard">
-                <mat-card class="display-card" appearance="outlined">
+                <mat-card class="card-face front" appearance="outlined">
                     <mat-card-header>
                         <mat-card-title>
                             <!--
@@ -34,7 +34,7 @@
                 </mat-card>
             </div>
             <div *ngIf="!showFrontOfCard">
-                <mat-card class="display-card" appearance="outlined">
+                <mat-card class="card-face back" appearance="outlined">
                     <mat-card-header>
                         <mat-card-title>
                             <!--
@@ -52,7 +52,7 @@
         </div>
 
         <div *ngIf="geoDataResponse$ === undefined">
-            <mat-card class="display-card-blank" appearance="outlined">
+            <mat-card class="card-face-blank" appearance="outlined">
                 <mat-card-header>
                     <mat-card-title>
                         <h1>

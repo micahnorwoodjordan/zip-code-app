@@ -52,7 +52,10 @@ export class DisplayComponent implements OnInit {
   private apiErrorMessageUnexpected4xx: string = 'A valid request returned a 4xx (non-404) error. The API may have been updated upstream.';
   private defaultGeoIconAnimationScale: number = 2;
   private geoIconElementId: string = 'geo-icon';
+  private cardElementId: string = 'card';
   private animationIsComplete: boolean = false;
+  private cardRotateYDegreesFront: number = 0;
+  private cardRotateYDegreesBack: number = 180;
   private _snackBar = inject(MatSnackBar);
 
   private setGeoDataResponse(newValue: Observable<GeoData> | undefined) { this.geoDataResponse$ = newValue; }
@@ -110,7 +113,15 @@ export class DisplayComponent implements OnInit {
   }
 
   public toggleCardSide() {
+    let cardElement: HTMLElement | null = document.getElementById(this.cardElementId);
     this.setShowFrontOfCard(!this.showFrontOfCard);
+
+    if (cardElement !== null) {
+      this.animationService.animateElement(cardElement, {
+        rotateY: this.showFrontOfCard ? this.cardRotateYDegreesFront : this.cardRotateYDegreesBack,
+        easing: 'easeInOutQuad'
+      });
+    }
   }
 
   public onSubmit() {
