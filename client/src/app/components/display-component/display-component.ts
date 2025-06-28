@@ -27,6 +27,7 @@ import { SnackbarComponent } from '../snackbar-component/snackbar-component';
 import { HttpStatusCode } from '../../enums/HttpStatusCodes';
 
 import { handleApiError } from '../../error-handling/APIErrorHandler';
+import { zipCodeValidator, getFormControlErrorMessage } from '../../error-handling/UserInputErrorHandler';
 
 @Component({
   selector: 'app-display-component',
@@ -50,7 +51,8 @@ export class DisplayComponent implements OnInit {
   public zipCodeInput: string = '';
   public readyToSubmit: boolean = false;
   public defaultInfoString: string = 'find geography data associated with a zip code';
-  public zipCodeInputFormControl = new FormControl('', [Validators.required, this.validateZipCodeInput()]);
+  public zipCodeInputFormControl = new FormControl('', [Validators.required, zipCodeValidator()]);
+  public zipCodeInputFormControlErrorMessage: string | null = null;
 
   private apiErrorMessageGeneric: string = 'there was an unknown issue getting the zip code you provided';
   private apiErrorMessage404: string = 'the zip code you provided does not exist';
@@ -63,6 +65,7 @@ export class DisplayComponent implements OnInit {
   private setZipCodeInput(newValue: string) { this.zipCodeInput = newValue; }
   private setReadyToSubmit(newValue: boolean) { this.readyToSubmit = newValue; }
   private setAnimationIsComplete(newValue: boolean) { this.animationIsComplete = newValue; }
+  private setZipCodeInputFormControlErrorMessage(newValue: string | null) { this.zipCodeInputFormControlErrorMessage = newValue; }
 
   private reset() {
     // wipe template's card when user begins to clear their input
@@ -84,12 +87,15 @@ export class DisplayComponent implements OnInit {
   constructor(private apiService: ApiService, private animationService: AnimationService) { }
 
   ngOnInit(): void {
+
     this.zipCodeInputFormControl.valueChanges.subscribe(value => {
-      // gets evaluated each time a user types into the form input field
-      if (!this.zipCodeErrorMessage && value !== null) {
+      // gets evaluated on each input field keystroke
+      let formControlErrorMessage = getFormControlErrorMessage(this.zipCodeInputFormControl);
+      if (!formControlErrorMessage && value !== null) {
         this.setReadyToSubmit(true);
         this.setZipCodeInput(value);
       } else {
+        this.setZipCodeInputFormControlErrorMessage(formControlErrorMessage);
         this.reset();
       }
     });
@@ -105,24 +111,6 @@ export class DisplayComponent implements OnInit {
       }
       this.animationService.animateElement(geoIconElement, animationPayload);
     }, this.animationService.redrawIntervalMilliseconds)
-  }
-
-  private validateZipCodeInput(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const isValid = /^\d{5}(-\d{4})?$/.test(control.value);  // simple regex to validate U.S. zip codes
-      return isValid ? null : { invalidZipCode: true };
-    };
-  }
-
-  public get zipCodeErrorMessage(): string | null {
-    const control = this.zipCodeInputFormControl;
-    if (control.hasError('required')) {
-      return 'Zip code is required';
-    }
-    if (control.hasError('invalidZipCode')) {
-      return 'Please enter a valid United States zip code.';
-    }
-    return null;
   }
 
   public onSubmit() {

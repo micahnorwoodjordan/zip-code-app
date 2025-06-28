@@ -8,8 +8,8 @@
         <mat-form-field class="input-field">
             <mat-label>enter zip code here</mat-label>
             <input matInput [formControl]="zipCodeInputFormControl">
-            <mat-error *ngIf="zipCodeErrorMessage">
-                {{ zipCodeErrorMessage }}
+            <mat-error *ngIf="zipCodeInputFormControlErrorMessage">
+                {{ zipCodeInputFormControlErrorMessage }}
             </mat-error>
         </mat-form-field>
     </div>
