@@ -52,7 +52,7 @@ export class DisplayComponent implements OnInit {
   private apiErrorMessageGeneric: string = 'there was an unknown issue getting the zip code you provided';
   private apiErrorMessage404: string = 'the zip code you provided does not exist';
   private apiErrorMessageUnexpected4xx: string = 'A valid request returned a 4xx (non-404) error. The API may have been updated upstream.';
-  private userAlertModalMessage: string = 'after getting geo data, you can flip the card by clicking it!';
+  private userAlertModalMessage: string = 'you can view each city\'s coordinates by clicking the card to flip it over!';
   private defaultGeoIconAnimationScale: number = 2;
   private geoIconElementId: string = 'geo-icon';
   private cardElementId: string = 'card';
