@@ -1,0 +1,4 @@
+.submit-button { border-radius: 10px; transform: scale(1); transition: 0.5s; }
+.submit-button:hover { transform: scale(1.5); transition: 0.5s; }
+
+.display-card { border-radius: 10px; text-align: center; }

@@ -1,1 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+.pad-top-5 { padding-top: 5vh; }
+.pad-bottom-5 { padding-bottom: 5vh; }
+.pad-left-5 { padding-left: 5vh; }
+.pad-right-5 { padding-right: 5vh; }
+
+.pad-top-10 { padding-top: 10vh; }
+.pad-bottom-10 { padding-bottom: 10vh; }
+.pad-left-10 { padding-left: 10vh; }
+.pad-right-10 { padding-right: 10vh; }

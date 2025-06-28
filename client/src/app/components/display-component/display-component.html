@@ -1,0 +1,28 @@
+<div fxLayout="column" fxLayoutAlign="center center">
+    <!-- input field -->
+    <div>
+        <mat-form-field class="input-field">
+            <mat-label>enter zip code here</mat-label>
+            <input matInput>
+        </mat-form-field>
+    </div>
+
+    <!-- display card -->
+    <div>
+        <mat-card class="display-card" appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>
+                    <h1>{{city}}</h1>
+                </mat-card-title>
+                <mat-card-subtitle>
+                    <h2>{{state}}</h2>
+                </mat-card-subtitle>
+            </mat-card-header>
+        </mat-card>
+    </div>
+
+    <!-- submit button -->
+    <div class="pad-top-5">
+    <button mat-raised-button class="submit-button">Submit</button>
+    </div>
+</div>
