@@ -37,11 +37,15 @@ import { ApiService } from '../../services/api-service';
 export class DisplayComponent implements OnInit {
   public city: string = 'Phoenix';
   public state: string = 'Arizona';
-  public geoData$!: Observable<GeoData>;
+  public geoDataResponse$!: Observable<GeoData>;
+  public zipCodeInput: string = '';
   public readyToSubmit: boolean = false;
+  public defaultInfoString: string = 'enter a valid zip code into the search bar to see geography data associated with it';
 
   public zipCodeInputFormControl = new FormControl('', [Validators.required, this.validateZipCodeInput()]);
 
+  private setGeoDataResponse(newValue: Observable<GeoData>) { this.geoDataResponse$ = newValue; }
+  private setZipCodeInput(newValue: string) { this.zipCodeInput = newValue; }
   private setReadyToSubmit(newValue: boolean) { this.readyToSubmit = newValue; }
 
   constructor(private apiService: ApiService) { }
@@ -51,6 +55,7 @@ export class DisplayComponent implements OnInit {
       // gets evaluated each time a user types into the form input field
       if (!this.zipCodeErrorMessage && value !== null) {
         this.setReadyToSubmit(true);
+        this.setZipCodeInput(value);
       } else {
         this.setReadyToSubmit(false);
       }
@@ -74,5 +79,18 @@ export class DisplayComponent implements OnInit {
       return 'Please enter a valid United States zip code.';
     }
     return null;
+  }
+
+  public onSubmit() {
+    if (this.readyToSubmit && this.zipCodeInput !== undefined) {
+      this.apiService.getZipCodeData(this.zipCodeInput).subscribe({
+        next: (geoDataResponse: GeoData) => {
+          this.setGeoDataResponse(of(geoDataResponse));
+        },
+        error: (err) => {
+          console.error('Error getting zip code data:', err);
+        }
+      });
+    }
   }
 }

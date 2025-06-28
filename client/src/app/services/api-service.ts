@@ -13,8 +13,6 @@ export class ApiService {
 
   constructor(private httpClient: HttpClient) { }
 
-  private env = environment;
-
   public getZipCodeData(zipCode: string) {
     let url: string = `${environment.baseURL}/${zipCode}`;
     return this.httpClient.get<GeoData>(url, { responseType: 'json' });
