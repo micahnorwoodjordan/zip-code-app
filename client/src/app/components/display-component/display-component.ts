@@ -35,13 +35,10 @@ import { ApiService } from '../../services/api-service';
   styleUrl: './display-component.css'
 })
 export class DisplayComponent implements OnInit {
-  public city: string = 'Phoenix';
-  public state: string = 'Arizona';
   public geoDataResponse$!: Observable<GeoData>;
   public zipCodeInput: string = '';
   public readyToSubmit: boolean = false;
   public defaultInfoString: string = 'enter a valid zip code into the search bar to see geography data associated with it';
-
   public zipCodeInputFormControl = new FormControl('', [Validators.required, this.validateZipCodeInput()]);
 
   private setGeoDataResponse(newValue: Observable<GeoData>) { this.geoDataResponse$ = newValue; }
@@ -60,12 +57,11 @@ export class DisplayComponent implements OnInit {
         this.setReadyToSubmit(false);
       }
     });
-    // this.apiService.getZipCodeData
   }
 
   private validateZipCodeInput(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const isValid = /^\d{5}(-\d{4})?$/.test(control.value);
+      const isValid = /^\d{5}(-\d{4})?$/.test(control.value);  // simple regex to validate U.S. zip codes
       return isValid ? null : { invalidZipCode: true };
     };
   }
@@ -88,6 +84,7 @@ export class DisplayComponent implements OnInit {
           this.setGeoDataResponse(of(geoDataResponse));
         },
         error: (err) => {
+          // TODO: fire snackbar on error
           console.error('Error getting zip code data:', err);
         }
       });

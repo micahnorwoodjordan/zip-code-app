@@ -15,6 +15,10 @@
         <mat-card class="display-card" appearance="outlined">
             <mat-card-header>
                 <mat-card-title>
+                    <!--
+                        NOTE: i wonder if it's safe to assume that accessing the 1st element will always make sense
+                        i have not been able to find a zip code that return more than one element
+                     -->
                     <h1>{{geoData.places[0]['place name']}}</h1>
                 </mat-card-title>
                 <mat-card-subtitle>
