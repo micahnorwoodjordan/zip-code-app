@@ -4,6 +4,7 @@ import { NgIf, AsyncPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 import {
@@ -26,6 +27,7 @@ import { ApiService } from '../../services/api-service';
     MatButtonModule,
     MatCardModule,
     MatInputModule,
+    MatIconModule,
     MatFormFieldModule,
     FormsModule,
     FlexLayoutModule,
@@ -35,15 +37,22 @@ import { ApiService } from '../../services/api-service';
   styleUrl: './display-component.css'
 })
 export class DisplayComponent implements OnInit {
-  public geoDataResponse$!: Observable<GeoData>;
+  public geoDataResponse$!: Observable<GeoData> | undefined;
   public zipCodeInput: string = '';
   public readyToSubmit: boolean = false;
-  public defaultInfoString: string = 'see geography data associated with a zip code';
+  public defaultInfoString: string = 'find geography data associated with a zip code';
   public zipCodeInputFormControl = new FormControl('', [Validators.required, this.validateZipCodeInput()]);
 
-  private setGeoDataResponse(newValue: Observable<GeoData>) { this.geoDataResponse$ = newValue; }
+  private setGeoDataResponse(newValue: Observable<GeoData> | undefined) { this.geoDataResponse$ = newValue; }
   private setZipCodeInput(newValue: string) { this.zipCodeInput = newValue; }
   private setReadyToSubmit(newValue: boolean) { this.readyToSubmit = newValue; }
+
+  private reset() {
+    // wipe template's card when user begins to clear their input
+    this.setGeoDataResponse(undefined);
+    this.setReadyToSubmit(false);
+    this.setZipCodeInput('');
+  }
 
   constructor(private apiService: ApiService) { }
 
@@ -54,7 +63,7 @@ export class DisplayComponent implements OnInit {
         this.setReadyToSubmit(true);
         this.setZipCodeInput(value);
       } else {
-        this.setReadyToSubmit(false);
+        this.reset();
       }
     });
   }
