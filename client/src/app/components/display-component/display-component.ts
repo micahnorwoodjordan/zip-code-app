@@ -2,6 +2,10 @@ import { Component } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+
+import { FormsModule } from '@angular/forms';
 
 import { FlexLayoutModule } from 'ng-flex-layout';
 
@@ -10,6 +14,9 @@ import { FlexLayoutModule } from 'ng-flex-layout';
   imports: [
     MatButtonModule,
     MatCardModule,
+    MatInputModule,
+    MatFormFieldModule,
+    FormsModule,
     FlexLayoutModule
   ],
   templateUrl: './display-component.html',
