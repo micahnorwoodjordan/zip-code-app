@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 
 import { FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -20,6 +21,7 @@ import { AnimationService } from '../../services/animation-service';
 import { SnackbarComponent } from '../snackbar-component/snackbar-component';
 import { handleApiError } from '../../error-handling/APIErrorHandler';
 import { zipCodeValidator, getFormControlErrorMessage } from '../../error-handling/UserInputErrorHandler';
+import { ModalComponent } from '../modal-component/modal-component';
 
 @Component({
   selector: 'app-display-component',
@@ -50,6 +52,7 @@ export class DisplayComponent implements OnInit {
   private apiErrorMessageGeneric: string = 'there was an unknown issue getting the zip code you provided';
   private apiErrorMessage404: string = 'the zip code you provided does not exist';
   private apiErrorMessageUnexpected4xx: string = 'A valid request returned a 4xx (non-404) error. The API may have been updated upstream.';
+  private userAlertModalMessage: string = 'after getting geo data, you can flip the card by clicking it!';
   private defaultGeoIconAnimationScale: number = 2;
   private geoIconElementId: string = 'geo-icon';
   private cardElementId: string = 'card';
@@ -57,6 +60,7 @@ export class DisplayComponent implements OnInit {
   private cardRotateYDegreesFront: number = 0;
   private cardRotateYDegreesBack: number = 180;
   private _snackBar = inject(MatSnackBar);
+  private _modal = inject(MatDialog);
 
   private setGeoDataResponse(newValue: Observable<GeoData> | undefined) { this.geoDataResponse$ = newValue; }
   private setZipCodeInput(newValue: string) { this.zipCodeInput = newValue; }
@@ -83,7 +87,9 @@ export class DisplayComponent implements OnInit {
   constructor(private apiService: ApiService, private animationService: AnimationService) { }
 
   ngOnInit(): void {
-
+    this._modal.open(ModalComponent, { data: {
+      alertMessage: this.userAlertModalMessage
+    } });
     this.zipCodeInputFormControl.valueChanges.subscribe(value => {
       // gets evaluated on each input field keystroke
       let formControlErrorMessage = getFormControlErrorMessage(this.zipCodeInputFormControl);
