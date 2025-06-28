@@ -1,0 +1,13 @@
+services:
+  client:
+    container_name: zip-code-app
+    image: node:24.0.0
+    working_dir: /app
+    volumes:
+      - ./client:/app
+      - /app/node_modules  # prevent node_modules from syncing with host
+    ports:
+      - 4200:4200
+    environment:
+      - CI=true  # bypass interactive node prompts
+    command: sh -c "npm install && npx ng serve --host 0.0.0.0"
