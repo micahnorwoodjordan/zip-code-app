@@ -30,4 +30,8 @@ body {
     typography: 'DinaRemaster',
     density: 0,
   ));
+
+  @include mat.snack-bar-overrides((
+    container-color: rgb(129, 84, 0)
+  ));
 }

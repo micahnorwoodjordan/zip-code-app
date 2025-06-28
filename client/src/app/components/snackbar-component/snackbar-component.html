@@ -1,6 +1,7 @@
+<div class="snackbar-div" fxLayout="column" fxLayoutAlign="center center">
+    <span class="snackbar-label" matSnackBarLabel>{{data.errorMessage}}</span>
 
-<span class="snackbar-label" matSnackBarLabel>{{data.errorMessage}}</span>
-
-<span matSnackBarActions>
-  <button matButton matSnackBarAction (click)="dismissSnackbar($event)">close</button>
-</span>
+    <span matSnackBarActions>
+    <button matSnackBarAction mat-raised-button (click)="dismissSnackbar($event)">close</button>
+    </span>
+</div>

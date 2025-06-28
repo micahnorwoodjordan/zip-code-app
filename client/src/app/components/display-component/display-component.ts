@@ -127,6 +127,7 @@ export class DisplayComponent implements OnInit {
       this.apiService.getZipCodeData(this.zipCodeInput).subscribe({
         next: (geoDataResponse: GeoData) => {
           this.setGeoDataResponse(of(geoDataResponse));
+          this._snackBar.dismiss();
         },
         error: (err) => {
           // TODO: add more granular handling

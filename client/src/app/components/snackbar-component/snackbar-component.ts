@@ -1,5 +1,9 @@
 import { Component, Inject, inject } from '@angular/core';
 
+import { FlexLayoutModule } from 'ng-flex-layout';
+
+import { MatButtonModule } from '@angular/material/button';
+
 import {
   MatSnackBar,
   MatSnackBarAction,
@@ -12,9 +16,11 @@ import {
 @Component({
   selector: 'app-snackbar-component',
   imports: [
+    MatButtonModule,
     MatSnackBarAction,
     MatSnackBarActions,
-    MatSnackBarLabel
+    MatSnackBarLabel,
+    FlexLayoutModule
   ],
   templateUrl: './snackbar-component.html',
   styleUrl: './snackbar-component.css'
