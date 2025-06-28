@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { NgIf, AsyncPipe } from '@angular/common';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import {
   FormControl, Validators, FormsModule, ReactiveFormsModule,
@@ -17,8 +18,16 @@ import { Observable, of } from 'rxjs';
 import { FlexLayoutModule } from 'ng-flex-layout';
 
 import { GeoData } from '../../interfaces/GeoData';
+
 import { ApiService } from '../../services/api-service';
 import { AnimationService } from '../../services/animation-service';
+
+import { SnackbarComponent } from '../snackbar-component/snackbar-component';
+
+import { HttpStatusCode } from '../../enums/HttpStatusCodes';
+
+import { handleApiError } from '../../error-handling/APIErrorHandler';
+import { zipCodeValidator, getFormControlErrorMessage } from '../../error-handling/UserInputErrorHandler';
 
 @Component({
   selector: 'app-display-component',
@@ -42,8 +51,12 @@ export class DisplayComponent implements OnInit {
   public zipCodeInput: string = '';
   public readyToSubmit: boolean = false;
   public defaultInfoString: string = 'find geography data associated with a zip code';
-  public zipCodeInputFormControl = new FormControl('', [Validators.required, this.validateZipCodeInput()]);
+  public zipCodeInputFormControl = new FormControl('', [Validators.required, zipCodeValidator()]);
+  public zipCodeInputFormControlErrorMessage: string | null = null;
 
+  private apiErrorMessageGeneric: string = 'there was an unknown issue getting the zip code you provided';
+  private apiErrorMessage404: string = 'the zip code you provided does not exist';
+  private apiErrorMessageUnexpected4xx: string = 'A valid request returned a 4xx (non-404) error. The API may have been updated upstream.';
   private defaultGeoIconAnimationScale: number = 2;
   private geoIconElementId: string = 'geo-icon';
   private animationIsComplete: boolean = false;
@@ -52,6 +65,7 @@ export class DisplayComponent implements OnInit {
   private setZipCodeInput(newValue: string) { this.zipCodeInput = newValue; }
   private setReadyToSubmit(newValue: boolean) { this.readyToSubmit = newValue; }
   private setAnimationIsComplete(newValue: boolean) { this.animationIsComplete = newValue; }
+  private setZipCodeInputFormControlErrorMessage(newValue: string | null) { this.zipCodeInputFormControlErrorMessage = newValue; }
 
   private reset() {
     // wipe template's card when user begins to clear their input
@@ -60,15 +74,28 @@ export class DisplayComponent implements OnInit {
     this.setZipCodeInput('');
   }
 
+  private _snackBar = inject(MatSnackBar);
+
+  private openSnackBar(message: string) {
+    this._snackBar.openFromComponent(SnackbarComponent, {
+      data: {
+        errorMessage: `${message}: ${this.zipCodeInput}`
+      }
+    });
+  }
+
   constructor(private apiService: ApiService, private animationService: AnimationService) { }
 
   ngOnInit(): void {
+
     this.zipCodeInputFormControl.valueChanges.subscribe(value => {
-      // gets evaluated each time a user types into the form input field
-      if (!this.zipCodeErrorMessage && value !== null) {
+      // gets evaluated on each input field keystroke
+      let formControlErrorMessage = getFormControlErrorMessage(this.zipCodeInputFormControl);
+      if (!formControlErrorMessage && value !== null) {
         this.setReadyToSubmit(true);
         this.setZipCodeInput(value);
       } else {
+        this.setZipCodeInputFormControlErrorMessage(formControlErrorMessage);
         this.reset();
       }
     });
@@ -86,33 +113,19 @@ export class DisplayComponent implements OnInit {
     }, this.animationService.redrawIntervalMilliseconds)
   }
 
-  private validateZipCodeInput(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const isValid = /^\d{5}(-\d{4})?$/.test(control.value);  // simple regex to validate U.S. zip codes
-      return isValid ? null : { invalidZipCode: true };
-    };
-  }
-
-  public get zipCodeErrorMessage(): string | null {
-    const control = this.zipCodeInputFormControl;
-    if (control.hasError('required')) {
-      return 'Zip code is required';
-    }
-    if (control.hasError('invalidZipCode')) {
-      return 'Please enter a valid United States zip code.';
-    }
-    return null;
-  }
-
   public onSubmit() {
     if (this.readyToSubmit && this.zipCodeInput !== undefined) {
       this.apiService.getZipCodeData(this.zipCodeInput).subscribe({
         next: (geoDataResponse: GeoData) => {
           this.setGeoDataResponse(of(geoDataResponse));
+          this._snackBar.dismiss();
         },
         error: (err) => {
-          // TODO: fire snackbar on error
-          console.error('Error getting zip code data:', err);
+          handleApiError(err, this.openSnackBar.bind(this), {
+            notFound: this.apiErrorMessage404,
+            generic: this.apiErrorMessageGeneric,
+            unexpected4xx: this.apiErrorMessageUnexpected4xx
+          });
         }
       });
     }
