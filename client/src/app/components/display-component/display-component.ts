@@ -134,6 +134,7 @@ export class DisplayComponent implements OnInit {
     if (this.readyToSubmit && this.zipCodeInput !== undefined) {
       this.apiService.getZipCodeData(this.zipCodeInput).subscribe({
         next: (geoDataResponse: GeoData) => {
+          this.setShowFrontOfCard(true);
           this.setGeoDataResponse(of(geoDataResponse));
           this._snackBar.dismiss();
         },
