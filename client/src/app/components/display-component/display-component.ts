@@ -18,6 +18,7 @@ import { FlexLayoutModule } from 'ng-flex-layout';
 
 import { GeoData } from '../../interfaces/GeoData';
 import { ApiService } from '../../services/api-service';
+import { AnimationService } from '../../services/animation-service';
 
 @Component({
   selector: 'app-display-component',
@@ -43,9 +44,14 @@ export class DisplayComponent implements OnInit {
   public defaultInfoString: string = 'find geography data associated with a zip code';
   public zipCodeInputFormControl = new FormControl('', [Validators.required, this.validateZipCodeInput()]);
 
+  private defaultGeoIconAnimationScale: number = 2;
+  private geoIconElementId: string = 'geo-icon';
+  private animationIsComplete: boolean = false;
+
   private setGeoDataResponse(newValue: Observable<GeoData> | undefined) { this.geoDataResponse$ = newValue; }
   private setZipCodeInput(newValue: string) { this.zipCodeInput = newValue; }
   private setReadyToSubmit(newValue: boolean) { this.readyToSubmit = newValue; }
+  private setAnimationIsComplete(newValue: boolean) { this.animationIsComplete = newValue; }
 
   private reset() {
     // wipe template's card when user begins to clear their input
@@ -54,7 +60,7 @@ export class DisplayComponent implements OnInit {
     this.setZipCodeInput('');
   }
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService, private animationService: AnimationService) { }
 
   ngOnInit(): void {
     this.zipCodeInputFormControl.valueChanges.subscribe(value => {
@@ -66,6 +72,18 @@ export class DisplayComponent implements OnInit {
         this.reset();
       }
     });
+
+    // this interval is crucial in applying a pulsing effect to the geo icon
+    // jsut trying to make the app a little more fun to use :)
+    setInterval(() => {
+      this.setAnimationIsComplete(!this.animationIsComplete);
+      let geoIconElement: HTMLElement | null = document.getElementById(this.geoIconElementId);
+      let animationPayload: any = {
+        scale: this.animationIsComplete ? this.defaultGeoIconAnimationScale : this.animationService.animationScaleCoefficient,
+        transition: this.animationService.defaultAnimationDuration
+      }
+      this.animationService.animateElement(geoIconElement, animationPayload);
+    }, this.animationService.redrawIntervalMilliseconds)
   }
 
   private validateZipCodeInput(): ValidatorFn {
