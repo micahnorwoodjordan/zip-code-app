@@ -7,7 +7,6 @@ import { DisplayComponent } from './components/display-component/display-compone
 @Component({
   selector: 'app-root',
   imports: [
-    RouterOutlet,
     FlexLayoutModule,
     DisplayComponent
   ],
