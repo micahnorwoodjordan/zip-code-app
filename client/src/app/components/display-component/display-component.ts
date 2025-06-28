@@ -38,7 +38,7 @@ export class DisplayComponent implements OnInit {
   public geoDataResponse$!: Observable<GeoData>;
   public zipCodeInput: string = '';
   public readyToSubmit: boolean = false;
-  public defaultInfoString: string = 'enter a valid zip code into the search bar to see geography data associated with it';
+  public defaultInfoString: string = 'see geography data associated with a zip code';
   public zipCodeInputFormControl = new FormControl('', [Validators.required, this.validateZipCodeInput()]);
 
   private setGeoDataResponse(newValue: Observable<GeoData>) { this.geoDataResponse$ = newValue; }

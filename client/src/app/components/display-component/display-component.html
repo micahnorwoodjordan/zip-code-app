@@ -1,4 +1,8 @@
 <div fxLayout="column" fxLayoutAlign="center center">
+    <div>
+        <h3 class="default-info-string">{{defaultInfoString}}</h3>
+    </div>
+
     <!-- input field -->
     <div>
         <mat-form-field class="input-field">
@@ -28,13 +32,8 @@
         </mat-card>
     </div>
 
-    <div *ngIf="geoDataResponse$ === undefined">
-        <p>{{defaultInfoString}}</p>
-    </div>
-
-
     <!-- submit button -->
     <div class="pad-top-5">
-    <button [disabled]="!readyToSubmit" mat-raised-button class="submit-button" (click)="onSubmit()">Submit</button>
+        <button [disabled]="!readyToSubmit" mat-raised-button class="submit-button" (click)="onSubmit()">Submit</button>
     </div>
 </div>

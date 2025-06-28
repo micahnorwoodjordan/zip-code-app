@@ -2,5 +2,11 @@
 .submit-button:hover { transform: scale(1.5); transition: 0.5s; }
 
 .display-card { border-radius: 10px; text-align: center; width: 30vw; }
+
+.input-field { font-size: larger; }
+
+.default-info-string { color: white; }
+
 mat-card-header { justify-content: center; text-align: center; }
 mat-card-title { font-family: 'DinaRemaster', 'Roboto'; }
+mat-label { font-size: large; }
